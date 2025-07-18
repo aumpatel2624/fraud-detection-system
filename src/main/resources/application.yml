@@ -33,3 +33,34 @@ springdoc:
 logging:
   level:
     com.FraudDetection: DEBUG
+
+# Fraud Detection Configuration
+fraud:
+  # Rule Configuration
+  rules:
+    velocity:
+      max-transactions-per-hour: 10
+      max-transactions-per-day: 50
+      max-amount-per-hour: 10000
+      max-amount-per-day: 50000
+    geo:
+      max-distance-km: 1000
+      min-time-between-locations-minutes: 60
+      high-risk-countries: "AF,IQ,IR,KP,SD,SY,YE"
+  
+  # Risk Scoring Configuration
+  scoring:
+    base-score: 20
+    max-score: 100
+    rule-weight: 0.6
+    transaction-weight: 0.2
+    account-weight: 0.1
+    customer-weight: 0.1
+  
+  # Decision Engine Configuration
+  decision:
+    auto-approve-threshold: 30
+    manual-review-threshold: 70
+    auto-reject-threshold: 85
+    high-confidence-threshold: 80
+    critical-rules: "VELOCITY_RULE,GEO_LOCATION_RULE"

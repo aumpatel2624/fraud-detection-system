@@ -90,6 +90,13 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("SELECT COUNT(t) FROM Transaction t WHERE t.timestamp >= :since")
     long countTransactionsSince(@Param("since") LocalDateTime since);
     
+    // Find first transaction before a timestamp (for geo-location fraud detection)
+    Optional<Transaction> findFirstByAccountIdAndTimestampBeforeOrderByTimestampDesc(String accountId, LocalDateTime timestamp);
+    
+    // Find distinct countries for geo-location fraud detection
+    @Query("SELECT DISTINCT t.location FROM Transaction t WHERE t.accountId = :accountId AND t.timestamp BETWEEN :startDate AND :endDate")
+    List<String> findDistinctCountriesByAccountIdAndTimestampBetween(@Param("accountId") String accountId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+    
     @Query("SELECT AVG(t.amount) FROM Transaction t WHERE t.accountId = :accountId AND t.timestamp >= :since")
     BigDecimal averageTransactionAmountByAccount(@Param("accountId") String accountId, @Param("since") LocalDateTime since);
     
